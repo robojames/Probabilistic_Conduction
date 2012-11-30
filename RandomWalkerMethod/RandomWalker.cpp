@@ -3,13 +3,22 @@
 using namespace std;
 using namespace concurrency;
 
-RandomWalker::RandomWalker(int XNODES, int YNODES, int NWALKERS)
+RandomWalker::RandomWalker()
 {
+	int NODES(0), NWALKERS(0);
+
 	// Initializes values of class properties
-	X_NODES = XNODES; 
-	Y_NODES = YNODES;
+	cout << endl << "Enter Node count: ";
+	cin >> NODES;
+
+	cout << endl << "Enter number of Random Walkers:  ";
+	cin >> NWALKERS;
+
+	X_NODES = NODES; 
+	Y_NODES = NODES;
 	N_WALKERS = NWALKERS;
-	
+	NODECOUNT = NODES;
+
 	// Resizes size(0) vector< vector<float> > to the number of nodes in the Y-direction.
 	T.resize(Y_NODES);
 
@@ -31,6 +40,12 @@ void RandomWalker::SetBoundaries(float T_E, float T_W, float T_N, float T_S)
 
 void RandomWalker::WriteToFile(char* FileName)
 {
+	if (T.empty())
+	{
+		cout << "T Vector is Empty" << endl;
+		return;
+	}
+
 	// Opens filestream object myFile
 	ofstream myFile;
 
@@ -59,7 +74,11 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 
 	srand(static_cast<unsigned>(time(0)));
 
-	float Temp;
+	// Initialize Temperature 'Temp' to 0
+	float Temp(0);
+
+	int iterations_Done(0);
+	float percent_Complete(0);
 
 	parallel_for (int(0), N_WALKERS, [&](int k)
 	{
@@ -76,11 +95,17 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 
 			reached_boundary = Check_Boundary( Temp, X_POS, Y_POS );
 		}
+
+		iterations_Done++;
+
+		if ( !(k % 50) ) {
+		percent_Complete = iterations_Done/static_cast<float>(N_WALKERS) * 100;
+
+		cout << "Percent Complete:  " << percent_Complete << "%" << endl;
+		}
 	});
 
-	cout << "T [ " << x_node << " , " << y_node << " ] = " << Temp;
-
-	return Temp;
+	return (Temp/static_cast<float>(N_WALKERS));
 }
 
 vector<vector<float>> RandomWalker::Solve_AllNodes(bool use_Diag)

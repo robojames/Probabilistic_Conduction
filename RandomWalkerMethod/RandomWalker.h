@@ -18,7 +18,7 @@ public:
 	//
 	// This function also properly sizes the vector<vector<float>> T, to avoid 
 	// resizing issues (memory, time).  
-	RandomWalker(int X_NODES, int Y_NODES, int N_WALKERS);
+	RandomWalker();
 
 	// Public Methods
 
@@ -55,7 +55,7 @@ public:
 	// char* FileName -> Indicates filename with which to name the output file
 	void WriteToFile(char* FileName);
 
-
+	int NODECOUNT;
 
 private:
 	float T_EAST, T_WEST, T_NORTH, T_SOUTH;

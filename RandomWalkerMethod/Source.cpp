@@ -6,17 +6,19 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	// Added comments to test GitHub BS
-	RandomWalker myWalker( 200, 200 , 2500 );
+	RandomWalker myWalker;
 
-	myWalker.SetBoundaries( 500, 250, 200, 150 );
+	myWalker.SetBoundaries( 200, 200, 500, 200 );
 
-	myWalker.Solve_AllNodes(false);
+	// Since L = 1 in both x and y directions, x/L=0.4 and y/L=0.3 is calculated as follows
+	int x_interest = static_cast<int>(myWalker.NODECOUNT * 0.4);
+	int y_interest = static_cast<int>(myWalker.NODECOUNT * 0.3);
 
-	myWalker.WriteToFile("TestFile2parrelel.csv");
-
+	cout << myWalker.Solve_1Node(false, x_interest, y_interest) << endl;
+	
+	int CWAIT;
 	cout << "Finished!" << endl;
-
+	cin >> CWAIT;
 
 	return 0;
 }
