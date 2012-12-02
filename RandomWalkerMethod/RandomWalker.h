@@ -64,9 +64,10 @@ public:
 	int NODECOUNT;
 
 private:
-	float T_EAST, T_WEST, T_NORTH, T_SOUTH;
+	float T_EAST, T_WEST, T_NORTH, T_SOUTH, L;
 
 	vector<vector<float>> T;
+	vector<int> vN_STEPS;
 	
 	int N_WALKERS, X_NODES, Y_NODES, N_STEPS;
 	

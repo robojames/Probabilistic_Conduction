@@ -22,11 +22,11 @@ RandomWalker::RandomWalker()
 	// Resizes size(0) vector< vector<float> > to the number of nodes in the Y-direction.
 	T.resize(Y_NODES);
 
+	vN_STEPS.resize(N_WALKERS);
+
 	// Resizes STL vector again to make a vector of vectors, sizeof ( XNODES, YNODES )
 	for (int i = 0; i < Y_NODES; i++)
 			T[i].resize(X_NODES);		
-	
-
 }
 
 float RandomWalker::AnalyticalSolution()
@@ -108,12 +108,14 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 	int iterations_Done(0);
 	float percent_Complete(0);
 
-	parallel_for (int(0), N_WALKERS, [&](int k)
-	{
+	//parallel_for (int(0), N_WALKERS, [&](int k)
+	//{
+	for (int k = 0; k < N_WALKERS; k++) {
+
+		vN_STEPS[k] = 0;
+
 		int X_POS = x_node;
 		int Y_POS = y_node;
-
-		N_STEPS = 0;
 
 		bool reached_boundary(false);
 
@@ -121,6 +123,8 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 		{
 			Move( X_POS, Y_POS, use_Diag);
 
+			vN_STEPS[k]++;
+			
 			reached_boundary = Check_Boundary( Temp, X_POS, Y_POS );
 		}
 
@@ -131,7 +135,8 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 
 		cout << "Percent Complete:  " << percent_Complete << "%" << endl;
 		}
-	});
+	//});
+	}
 
 	return (Temp/static_cast<float>(N_WALKERS));
 }
