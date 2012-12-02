@@ -15,6 +15,8 @@ int main(int argc, char* argv[])
 	int y_interest = static_cast<int>(myWalker.NODECOUNT * 0.3);
 
 	cout << myWalker.Solve_1Node(false, x_interest, y_interest) << endl;
+
+	cout << "Analytic Solution:  " << myWalker.AnalyticalSolution() << endl;
 	
 	int CWAIT;
 	cout << "Finished!" << endl;

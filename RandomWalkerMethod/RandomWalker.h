@@ -6,6 +6,10 @@
 #include <ppl.h>
 #include <fstream>
 
+#define _USE_MATH_DEFINES
+
+#include <math.h>
+
 using namespace std;
 
 class RandomWalker
@@ -49,6 +53,8 @@ public:
 	// int y_node -> integer representing the node at which to solve for the temperature at in the y-direction
 	float Solve_1Node(bool flag, int &x_node, int &y_node);
 
+
+	float AnalyticalSolution();
 
 	// WriteToFile - Writes the data to a .csv file for plotting (will eventually replace with OpenGL Plotter)
 	//

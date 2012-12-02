@@ -29,6 +29,34 @@ RandomWalker::RandomWalker()
 
 }
 
+float RandomWalker::AnalyticalSolution()
+{
+	// Initialize Analytic solution to 0
+	float T_ANALYTIC(0.0f);
+	
+	float part_1(0.0f);
+	float part_2(0.0f);
+	float part_3(0.0f);
+	float part_4(0.0f);
+
+	for (int n = 1; n <= 40; n++)
+	{
+		part_1 = (powf( -1.0f, static_cast<float>(n + 1.0f) ) + 1.0f) / static_cast<float>(n);
+		part_2 = sinf( static_cast<float>(n * M_PI * 0.4f) );
+		part_3 = sinhf( static_cast<float>(n * M_PI * 0.3f) );
+		part_4 = sinhf( static_cast<float>(n * M_PI) );
+
+		T_ANALYTIC += (part_1 * part_2 * (part_3 / part_4));
+	}
+
+
+	T_ANALYTIC *= static_cast<float>(2.0f / M_PI); 
+
+	T_ANALYTIC = T_ANALYTIC * (T_NORTH - T_EAST) + T_EAST;
+
+	return T_ANALYTIC;
+}
+
 void RandomWalker::SetBoundaries(float T_E, float T_W, float T_N, float T_S)
 {
 	// Sets the boundary temperature values to the passed in value
