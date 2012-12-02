@@ -22,8 +22,6 @@ RandomWalker::RandomWalker()
 	// Resizes size(0) vector< vector<float> > to the number of nodes in the Y-direction.
 	T.resize(Y_NODES);
 
-	vN_STEPS.resize(N_WALKERS);
-
 	// Resizes STL vector again to make a vector of vectors, sizeof ( XNODES, YNODES )
 	for (int i = 0; i < Y_NODES; i++)
 			T[i].resize(X_NODES);		
@@ -103,7 +101,9 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 	srand(static_cast<unsigned>(time(0)));
 
 	// Initialize Temperature 'Temp' to 0
-	float Temp(0);
+	float Temp(0.0f);
+
+	float SUM_Steps(0.0f);
 
 	int iterations_Done(0);
 	float percent_Complete(0);
@@ -112,10 +112,10 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 	//{
 	for (int k = 0; k < N_WALKERS; k++) {
 
-		vN_STEPS[k] = 0;
-
 		int X_POS = x_node;
 		int Y_POS = y_node;
+
+		N_STEPS = 0;
 
 		bool reached_boundary(false);
 
@@ -123,10 +123,12 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 		{
 			Move( X_POS, Y_POS, use_Diag);
 
-			vN_STEPS[k]++;
+			N_STEPS++;
 			
 			reached_boundary = Check_Boundary( Temp, X_POS, Y_POS );
 		}
+
+		SUM_Steps += N_STEPS;
 
 		iterations_Done++;
 
@@ -139,6 +141,58 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 	}
 
 	return (Temp/static_cast<float>(N_WALKERS));
+}
+
+
+float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node, float q_triple, float grid_spacing, float thermal_Conductivity)
+{
+	T.clear();
+
+	srand(static_cast<unsigned>(time(0)));
+
+	// Initialize Temperature 'Temp' to 0
+	float Temp(0.0f);
+
+	float SUM_Steps(0.0f);
+
+	int iterations_Done(0);
+	float percent_Complete(0);
+
+	//parallel_for (int(0), N_WALKERS, [&](int k)
+	//{
+	for (int k = 0; k < N_WALKERS; k++) {
+
+		int X_POS = x_node;
+		int Y_POS = y_node;
+
+		N_STEPS = 0;
+
+		bool reached_boundary(false);
+
+		while (!reached_boundary)
+		{
+			Move( X_POS, Y_POS, use_Diag);
+
+			N_STEPS++;
+			
+			reached_boundary = Check_Boundary( Temp, X_POS, Y_POS );
+		}
+
+		SUM_Steps += N_STEPS;
+
+		iterations_Done++;
+
+		if ( !(k % 50) ) {
+		percent_Complete = iterations_Done/static_cast<float>(N_WALKERS) * 100;
+
+		cout << "Percent Complete:  " << percent_Complete << "%" << endl;
+		}
+	//});
+	}
+
+	Temp = Temp/static_cast<float>(N_WALKERS) + (q_triple * grid_spacing * grid_spacing)/(4.0f * thermal_Conductivity) * (1.0f / N_WALKERS) * SUM_Steps;
+
+	return Temp;
 }
 
 vector<vector<float>> RandomWalker::Solve_AllNodes(bool use_Diag)

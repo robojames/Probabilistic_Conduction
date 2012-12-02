@@ -53,6 +53,8 @@ public:
 	// int y_node -> integer representing the node at which to solve for the temperature at in the y-direction
 	float Solve_1Node(bool flag, int &x_node, int &y_node);
 
+	float Solve_1Node(bool use_Diag, int &x_node, int &y_node, float q_triple, float grid_spacing, float thermal_Conductivity);
+
 
 	float AnalyticalSolution();
 
@@ -67,7 +69,6 @@ private:
 	float T_EAST, T_WEST, T_NORTH, T_SOUTH, L;
 
 	vector<vector<float>> T;
-	vector<int> vN_STEPS;
 	
 	int N_WALKERS, X_NODES, Y_NODES, N_STEPS;
 	
