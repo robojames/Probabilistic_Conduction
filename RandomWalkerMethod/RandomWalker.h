@@ -5,6 +5,8 @@
 #include <vector>
 #include <ppl.h>
 #include <fstream>
+#include <boost\random.hpp>
+#include <boost\generator_iterator.hpp>
 
 #define _USE_MATH_DEFINES
 
@@ -77,6 +79,8 @@ private:
 	// X_POS_INI - integer value containing the initial nodal x-position of the random walker
 	// Y_POS_INI - integer value containing the initial nodal y-position of the random walker
 	void Move(int &X_POS_INI, int &Y_POS_INI, bool use_Diag);
+
+	void Move(int &X_POS_INI, int &Y_POS_INI, bool use_Diag, int direction);
 
 	// getDirection - Returns an random integer indicating a direction for the random walker
 	// to travel.  The bool value use_Diag indicated whether the user wishes to include the

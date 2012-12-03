@@ -2,6 +2,7 @@
 
 using namespace std;
 using namespace concurrency;
+using namespace boost;
 
 RandomWalker::RandomWalker()
 {
@@ -96,9 +97,13 @@ void RandomWalker::WriteToFile(char* FileName)
 
 float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 {
-	T.clear();
+	typedef mt19937 RNGType;
 
-	srand(static_cast<unsigned>(time(0)));
+	RNGType range( time(0) );
+	
+	uniform_int<> random_int(1,4);
+	
+	variate_generator< RNGType, uniform_int<> > dice(range, random_int);
 
 	// Initialize Temperature 'Temp' to 0
 	float Temp(0.0f);
@@ -108,9 +113,8 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 	int iterations_Done(0);
 	float percent_Complete(0);
 
-	//parallel_for (int(0), N_WALKERS, [&](int k)
-	//{
-	for (int k = 0; k < N_WALKERS; k++) {
+	for (int k = 0; k < N_WALKERS; k++)
+	{
 
 		int X_POS = x_node;
 		int Y_POS = y_node;
@@ -121,7 +125,7 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 
 		while (!reached_boundary)
 		{
-			Move( X_POS, Y_POS, use_Diag);
+			Move( X_POS, Y_POS, use_Diag, dice());
 
 			N_STEPS++;
 			
@@ -137,12 +141,10 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 
 		cout << "Percent Complete:  " << percent_Complete << "%" << endl;
 		}
-	//});
-	}
+	}	
 
 	return (Temp/static_cast<float>(N_WALKERS));
 }
-
 
 float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node, float q_triple, float grid_spacing, float thermal_Conductivity)
 {
@@ -276,6 +278,65 @@ void RandomWalker::Move(int &X_POS_INI, int &Y_POS_INI, bool use_Diag)
 	else
 	{
 		switch (dir)
+			{
+				case 1: // Moves North
+					Y_POS_INI++;
+					break;
+				case 2: // Moves South
+					Y_POS_INI--;
+					break;
+				case 3: // Moves West
+					X_POS_INI--;
+					break;
+				case 4: // Moves East
+					X_POS_INI++;
+					break;
+				case 5: // Moves NorthEast		--> BEGIN DIAGONAL DIRECTIONS <--
+					Y_POS_INI++;
+					X_POS_INI++;
+					break;
+				case 6: // Moves NorthWest
+					X_POS_INI--;
+					Y_POS_INI++;
+					break;
+				case 7: // Moves SouthWest
+					Y_POS_INI--;
+					X_POS_INI--;
+					break;
+				case 8: // Moves SouthEast
+					Y_POS_INI--;
+					X_POS_INI++;
+					break;
+			}
+	}
+}
+
+
+void RandomWalker::Move(int &X_POS_INI, int &Y_POS_INI, bool use_Diag, int direction)
+{
+	N_STEPS++;
+
+	if (!use_Diag) {
+
+	switch (direction)
+		{
+			case 1: // Moves North
+				Y_POS_INI++;
+				break;
+			case 2: // Moves South
+				Y_POS_INI--;
+				break;
+			case 3: // Moves West
+				X_POS_INI--;
+				break;
+			case 4: // Moves East
+				X_POS_INI++;
+				break;
+		}
+	}
+	else
+	{
+		switch (direction)
 			{
 				case 1: // Moves North
 					Y_POS_INI++;
