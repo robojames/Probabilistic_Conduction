@@ -28,7 +28,9 @@ RandomWalker::RandomWalker()
 
 	// Resizes STL vector again to make a vector of vectors, sizeof ( XNODES, YNODES )
 	for (int i = 0; i < Y_NODES; i++)
-			T[i].resize(X_NODES);		
+			T[i].resize(X_NODES);	
+
+
 }
 
 float RandomWalker::AnalyticalSolution()
@@ -112,8 +114,10 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 	// Initializes typedef to avoid typing mt19937 all over the place
 	typedef mt19937 RNGType;
 
+	time_t myTime = time(0);
+
 	// Sets up RNGType's (mt19937) seed value based on the time
-	RNGType range( static_cast<uint32_t>(time(0)) );
+	RNGType range(myTime);
 	
 	// Defines PDF (uniform) and range (integer from 1 - 4)
 	uniform_int<> random_int(1,4);
@@ -160,7 +164,7 @@ float RandomWalker::Solve_1Node(bool use_Diag, int &x_node, int &y_node)
 
 			percent_Complete = iterations_Done/static_cast<float>(N_WALKERS) * 100;
 
-			cout << "Percent Complete:  " << percent_Complete << "%" << endl;
+			//cout << "Percent Complete:  " << percent_Complete << "%" << endl;
 		}
 	}	
 
