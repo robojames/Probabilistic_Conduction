@@ -55,9 +55,11 @@ public:
 	// int y_node -> integer representing the node at which to solve for the temperature at in the y-direction
 	float Solve_1Node(bool flag, int &x_node, int &y_node);
 
+	// Overloaded function which takes additional terms to take into consideration the effect of source terms
 	float Solve_1Node(bool use_Diag, int &x_node, int &y_node, float q_triple, float grid_spacing, float thermal_Conductivity);
 
-
+	// AnalyticalSolution - Calculates the analytic temperature distribution for x/L = 0.4 and y/L = 0.3
+	// and takes no parameters
 	float AnalyticalSolution();
 
 	// WriteToFile - Writes the data to a .csv file for plotting (will eventually replace with OpenGL Plotter)
@@ -65,21 +67,26 @@ public:
 	// char* FileName -> Indicates filename with which to name the output file
 	void WriteToFile(char* FileName);
 
+	// Node count (same for both x and y directions)
 	int NODECOUNT;
 
 private:
+	// Temperature boundary conditions on each face
 	float T_EAST, T_WEST, T_NORTH, T_SOUTH, L;
 
+	// 2D Array of floats to hold the temperature field
 	vector<vector<float>> T;
 	
+	// Integer values to hold the number of walkers, number of x and y nodes, and the number
+	// of steps for convergence
 	int N_WALKERS, X_NODES, Y_NODES, N_STEPS;
 	
 	// Move - gets random integer from getDirection() then, updates the nodal position based
 	// on the movement of the random walker.  
 	// X_POS_INI - integer value containing the initial nodal x-position of the random walker
 	// Y_POS_INI - integer value containing the initial nodal y-position of the random walker
-	void Move(int &X_POS_INI, int &Y_POS_INI, bool use_Diag);
-
+	// direction - integer value between 1-4 (or 1-8) depending on the value of use_Diag which
+	// indicates the direction to move
 	void Move(int &X_POS_INI, int &Y_POS_INI, bool use_Diag, int direction);
 
 	// getDirection - Returns an random integer indicating a direction for the random walker
