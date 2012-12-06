@@ -86,10 +86,12 @@
   <ItemGroup>
     <ClCompile Include="RandomWalker.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="ViewFactorAnalysis.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RandomWalker.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ViewFactorAnalysis.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RandomWalkerMethod.rc" />

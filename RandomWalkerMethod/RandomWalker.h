@@ -1,4 +1,6 @@
-#pragma once
+#ifndef RANDOMWALKER_H
+#define RANDOMWALKER_H
+
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
@@ -106,3 +108,4 @@ private:
 	bool Check_Boundary(float &TEMP, int X_POS, int Y_POS);
 };
 
+#endif
