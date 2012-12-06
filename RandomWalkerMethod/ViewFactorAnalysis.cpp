@@ -53,11 +53,40 @@ float ViewFactorAnalysis::Solve()
 		// Calculate Beta Min, and Beta Max
 		Calculate_Beta(Beta_Min, Beta_Max, x_pos);
 
+		// "Launch" photon and see if it falls within the range of beta_min to beta_max
+		bool hit = LaunchPhoton( static_cast<float>(dice()) );
+
+		if (hit)
+		{
+			N_hits++;
+		}
 
 	}
 
+	F12 = static_cast<float>(N_hits)/static_cast<float>(N);
+
 	return F12;
 
+}
+
+bool ViewFactorAnalysis::LaunchPhoton(float rand_launchangle)
+{
+	bool within_Range = false;
+
+	float beta_Launch = 0.0f;
+
+	beta_Launch = asinf( (2.0f * rand_launchangle) - 1 );
+
+	//cout << "Launch angle (degrees):  " << beta_Launch*(180.0f/M_PI) << "       ";
+	
+	if (beta_Launch <= Beta_Max && beta_Launch >= Beta_Min)
+		within_Range = true;
+	else
+		within_Range = false;
+
+	//cout << within_Range << endl;
+
+	return within_Range;
 }
 
 void ViewFactorAnalysis::Calculate_Beta(float &B_MIN, float &B_MAX, float x_pos)
@@ -66,8 +95,8 @@ void ViewFactorAnalysis::Calculate_Beta(float &B_MIN, float &B_MAX, float x_pos)
 	// basic geometry...
 
 	// The maximum beta for the prescribed geometry will always be pi/2 radians
-	B_MAX = (M_PI / 2.0f);
+	B_MAX = (static_cast<float>(M_PI) / 2.0f);
 
-	B_MIN = (M_PI / 2.0f) - tanhf(height / x_pos);
+	B_MIN = (static_cast<float>(M_PI) / 2.0f) - atan2f(height , x_pos);
 }
 

@@ -43,11 +43,13 @@ private:
 	// Float values describing both the width and height of the plates analyzed
 	float width, height;
 
-	// Number of photons
-	int N;
+	// Number of photons that are launched and hit
+	int N, N_hits;
 
 	// Used to store value of minimum and maximum of Beta
 	float Beta_Min, Beta_Max;
+
+	bool LaunchPhoton(float launch_angle);
 
 	void Calculate_Beta(float &B_MIN, float &B_MAX, float x_pos);
 };

@@ -15,9 +15,10 @@ int main(int argc, char* argv[])
 	//int x_interest = static_cast<int>(myWalker.NODECOUNT * 0.4);
 	//int y_interest = static_cast<int>(myWalker.NODECOUNT * 0.3);
 	
-	ViewFactorAnalysis myAnalysis(50, 0.5, 0.5);
-	
-	myAnalysis.Solve();
+	ViewFactorAnalysis myAnalysis(5000, 10, 4);
+	cout << endl;
+	cout << myAnalysis.Solve() << endl;
+	cout << myAnalysis.AnalyticSolution() << endl;
 	
 	
 	int CWAIT;
